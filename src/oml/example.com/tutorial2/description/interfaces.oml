@@ -1,0 +1,49 @@
+
+
+// 2.8 P6: Component presents interface
+// Note: in the OML code bellow a new element defined with the keywords relation instance. 
+// This is a named instance that represents a reified link between two instances. 
+// A relation instance is typed by one or more relation entity (comparable to a concept instance being typed by one or more concepts). 
+// For example, the first relation instance above named orbiter-ground-data-system.presents.telemetryIn is typed by the mission:Presents relation entity 
+// and is from concept instance components:orbiter-ground-data-system (a component) to concept instance orbiter-ground-data-system.telemetryIn (an interface).
+
+description <http://example.com/tutorial2/description/interfaces#> as interfaces {
+
+	uses <http://example.com/tutorial2/vocabulary/base#> as base
+	uses <http://example.com/tutorial2/vocabulary/mission#> as mission
+	extends <http://example.com/tutorial2/description/components#> as components
+
+	instance orbiter-ground-data-system.telemetryIn : mission:Interface [
+		base:hasIdentifier "I.04"
+		base:hasCanonicalName "Telemetry In"
+	]
+	relation instance orbiter-ground-data-system.presents.telemetryIn : mission:Presents [
+		from components:orbiter-ground-data-system
+		to orbiter-ground-data-system.telemetryIn
+	]
+	instance orbiter-ground-data-system.commandOut : mission:Interface [
+		base:hasIdentifier "I.03"
+		base:hasCanonicalName "Command Out"
+	]
+	relation instance orbiter-ground-data-system.presents.commandOut : mission:Presents [
+		from components:orbiter-ground-data-system
+		to orbiter-ground-data-system.commandOut
+	]
+
+	instance orbiter-spacecraft.commandIn : mission:Interface [
+		base:hasIdentifier "I.01"
+		base:hasCanonicalName "Command In"
+	]
+	relation instance orbiter-spacecraft.presents.commandIn : mission:Presents [
+		from components:orbiter-spacecraft
+		to orbiter-spacecraft.commandIn
+	]
+	instance orbiter-spacecraft.telemetryOut : mission:Interface [
+		base:hasIdentifier "I.02"
+		base:hasCanonicalName "Telemetry Out"
+	]
+	relation instance orbiter-spacecraft.presents.telemetryOut : mission:Presents [
+		from components:orbiter-spacecraft
+		to orbiter-spacecraft.telemetryOut
+	]
+}

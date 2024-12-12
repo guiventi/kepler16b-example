@@ -1,0 +1,125 @@
+vocabulary <http://example.com/tutorial2/vocabulary/mission#> as mission {
+	
+	extends <http://www.w3.org/2000/01/rdf-schema#> as rdfs
+	extends <http://example.com/tutorial2/vocabulary/base#> as base
+	@rdfs:comment "An Objective represents a specific interest that one or more stakeholders have in the successful execution of a mission."
+	concept Objective < base:IdentifiedThing, base:AggregatedThing [
+		restricts all base:aggregates to Objective
+		restricts all base:isAggregatedIn to Objective
+	]
+	
+	@rdfs:comment "A Mission pursues Objectives."
+	concept Mission < base:IdentifiedThing
+
+	@rdfs:comment "A Mission pursues zero or more Objectives."
+	relation entity Pursues [
+		from Mission
+		to Objective
+		forward pursues
+		reverse isPursuedBy
+		asymmetric
+		irreflexive
+	]	
+	
+	@rdfs:comment "A Component is something that can be deployed in a mission."
+	concept Component < base:IdentifiedThing
+	
+	@rdfs:comment "A Mission deploys zero or more Components."
+	relation entity Deploys [
+		from Mission
+		to Component
+		forward deploys
+		reverse isDeployedBy
+		asymmetric
+		irreflexive
+	]
+
+	@rdfs:comment "A Component can be organized hierarchically by containing other Components. "
+	ref concept Component < base:ContainedElement [
+		restricts all base:contains to Component
+		restricts all base:isContainedIn to Component
+	]
+	
+	// 2.8. P6: Component presents Interface
+	// Components contain other components. These subcomponents interact in ways that lead to emergent behavior. 
+	// The interactions are sometimes the result of purposeful interconnection. Components may be designed with specific features to allow or enact interconnection. 
+	// These features we call Interfaces. We say Components present Interfaces. 
+	// Note that an interface is on one side or the other; it’s not the connection itself.
+	
+	@rdfs:comment "An Interface represents a set of features that describe some Component’s interaction with another Component."
+	concept Interface < base:IdentifiedThing
+	
+	@rdfs:comment "A Component presents zero or more Interfaces."
+	relation entity Presents [
+		from Component
+		to Interface
+		forward presents
+		reverse isPresentedBy
+		inverse functional
+		asymmetric
+		irreflexive
+	]
+	
+	// 2.9. P7: Requirement specifies Presents
+	// Requirements specify conditions that must be true of the system. One thing a requirement may specify is that some component 
+	// presents an interface of a certain type or with certain properties. We say this with the reification pattern: 
+	// (Requirement specifies (Component presents Interface)), in which (Component presents Interface) is reified with a member of 
+	// class Presents (as seen above in P6).
+	
+	// Note: how we added aspect SpecifiedThing as another supertype to relation entity Presents, which was previous defined. 
+	// This says that its relation instances can be ranges of Specifies links.
+	
+	@rdfs:comment "SpecifiedThing is something that isSpecifiedBy a Requirement"
+	aspect SpecifiedThing
+	
+	@rdfs:comment "Presents is a relation that can be specified by a requirement."
+	ref relation entity Presents < SpecifiedThing
+	
+	@rdfs:comment "A Requirement specifies that something must be true about something."
+	concept Requirement < base:IdentifiedThing
+	
+	@rdfs:comment "A Requirement specifies zero or more SpecifiedThings."
+	relation entity Specifies [
+		from Requirement
+		to SpecifiedThing
+		forward specifies
+		reverse isSpecifiedBy
+		functional
+		asymmetric
+		irreflexive
+	]
+	
+	// 2.10. P8: Interface joins Interface
+	// Junctions represent actual connections between Interfaces presented by Components. 
+	// When a component has an interface that joins an interface of another component, we infer that there is a Connection between these components.
+	
+	// Note: how the rule Junction-infers-Connection says that when a component presents an interface that joins another interface, 
+	// which is presented by another component, then the former component is said to connect to the latter component. 
+	// Since both relation entities Junction and Connection are flagged as symmetric, a single assertion that a junction joins one interface 
+	// to another is sufficient to make a DL reasoner infer that both their components connect to one another.
+	
+	
+	@rdfs:comment "A Junction joins two or more Interfaces."
+	relation entity Junction [
+		from Interface
+		to Interface
+		forward joins
+		symmetric
+		irreflexive
+	] < base:IdentifiedThing
+	
+	@rdfs:comment "A Component connects to zero or more components."
+	relation entity Connection [
+		from Component
+		to Component
+		forward connectsTo
+		symmetric
+	]
+	
+	@rdfs:comment "When interfaces presented by components are joined, we infer that the components are connected."
+	rule Junction-infers-Connection [
+		presents(c1, i1) & joins(i1, i2) & isPresentedBy(i2, c2) -> connectsTo(c1, c2)
+	]
+		
+
+}
