@@ -1,6 +1,6 @@
 vocabulary bundle <http://example.com/tutorial2/vocabulary/bundle#> as ^bundle {
-	//GV removido a linha abaixo para testar já que  voculary/mechanical.oml  extende mission
-	//includes <http://example.com/tutorial2/vocabulary/mission#> 
+	// GV removido a linha abaixo para testar já que  voculary/mechanical.oml  extende mission
+	includes <http://example.com/tutorial2/vocabulary/mission#> 
 	
 	includes <http://example.com/tutorial2/vocabulary/mechanical#>
 	
