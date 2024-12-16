@@ -15,6 +15,9 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+    
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew      
       
     - name: Setup JDK
       uses: actions/setup-java@v3
@@ -27,9 +30,9 @@ jobs:
 
     - name: Build
       run: ./gradlew build
-      
+
     - name: Query
-      run: ./gradlew owlQuery
+      run: ./gradlew owlQuery --info
 
     - name: Upload
       if: ${{ always() }}
