@@ -92,12 +92,12 @@ stroke: steelblue;
 stroke-width: 3px;
 }
 .node text {
-font: 12px sans-serif;
+font: 12px sans-serif;           
 }
 .link {
 fill: none;
 stroke: #ccc;
-stroke-width: 1px;
+stroke-width: 2px;
 }
 </style>
 <div id='figure3'></div>
