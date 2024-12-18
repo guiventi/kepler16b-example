@@ -1,2 +1,12 @@
 /.gradle/
 /build/
+
+# MacOS files
+.DS_Store
+
+# Fuseki output directory
+.fuseki
+
+#Jupyter
+__pycache__/
+*.py[cod]
